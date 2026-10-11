@@ -1,0 +1,8 @@
+# Compiled temperature monitor
+/temperature
+
+# Object files
+*.o
+
+# Build directories
+build/
