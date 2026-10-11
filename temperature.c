@@ -3,10 +3,7 @@
 #include <unistd.h>
 #include <signal.h>
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <signal.h>
+
 
 // When program receives SIGINT, stop_requested changes to 1 and exits the program
 volatile sig_atomic_t stop_requested = 0;
@@ -26,7 +23,7 @@ int main() {
     sa.sa_handler = handle_signal;
     sigemptyset(&sa.sa_mask);
     sa.sa_flags = 0;
-    
+
 
     if (sigaction(SIGINT, &sa, NULL) == -1) {
         perror("Error registering signal handler");
