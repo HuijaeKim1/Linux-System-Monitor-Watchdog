@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include "cpu.h"
 
 // Read CPU statistics from /proc/stat
 int read_cpu(unsigned long long *total, unsigned long long *idle)
@@ -33,46 +34,3 @@ int read_cpu(unsigned long long *total, unsigned long long *idle)
     return 0;
 }
 
-int main()
-{
-    unsigned long long total1 = 0;
-    unsigned long long idle1 = 0;
-
-    unsigned long long total2 = 0;
-    unsigned long long idle2 = 0;
-
-    // Read first CPU snapshot
-    if (read_cpu(&total1, &idle1) != 0) {
-        return 1;
-    }
-
-    while(1){
-
-        sleep(1);
-
-        // Read second CPU snapshot
-        if(read_cpu(&total2, &idle2) != 0){
-            return 1;
-        }
-
-
-        unsigned long long delta_total = total2 - total1;
-        unsigned long long delta_idle = idle2 - idle1;
-
-        // Prevent dividing by 0
-        if (delta_total == 0) {
-            fprintf(stderr, "Error: No CPU time elapsed\n");
-            return 1;
-        }
-
-
-        double cpu_usage = 100 * (1 - (double)delta_idle/delta_total);
-
-        printf("CPU Usage: %.2f%%\n", cpu_usage);
-
-        total1 = total2;
-        idle1 = idle2;
-
-    }
-    return 0;
-}
